@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#05070b">
+  <meta name="theme-color" content="#06080d">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <title>VoidHub — Install</title>
+  <title>VoidHub — Installer</title>
   <style>
     * {
       box-sizing: border-box;
@@ -15,13 +15,15 @@
     }
     :root {
       --bg: #05070b;
-      --panel: rgba(13, 17, 25, .82);
-      --panel-2: #0b0f17;
-      --text: #f5f8fc;
-      --muted: #8994a7;
-      --cyan: #4be8ff;
-      --green: #68f5a5;
-      --line: rgba(255,255,255,.09);
+      --card: rgba(12, 15, 22, .78);
+      --card-solid: #0d1119;
+      --text: #f7f9fc;
+      --muted: #8791a3;
+      --dim: #586173;
+      --cyan: #55e8ff;
+      --cyan-soft: rgba(85, 232, 255, .15);
+      --green: #6df5a8;
+      --border: rgba(255,255,255,.075);
     }
     html,
     body {
@@ -30,313 +32,508 @@
     }
     body {
       min-height: 100svh;
-      display: grid;
-      place-items: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding:
+        max(18px, env(safe-area-inset-top))
+        18px
+        max(18px, env(safe-area-inset-bottom));
       overflow: hidden;
-      padding: 18px;
+      background:
+        radial-gradient(
+          circle at 50% -10%,
+          rgba(85,232,255,.14),
+          transparent 38%
+        ),
+        radial-gradient(
+          circle at 100% 100%,
+          rgba(85,232,255,.055),
+          transparent 35%
+        ),
+        var(--bg);
       color: var(--text);
       font-family:
         -apple-system,
         BlinkMacSystemFont,
         "SF Pro Display",
+        "SF Pro Text",
         "Segoe UI",
         sans-serif;
-      background:
-        radial-gradient(
-          circle at 50% 10%,
-          rgba(75,232,255,.16),
-          transparent 32%
-        ),
-        radial-gradient(
-          circle at 50% 100%,
-          rgba(104,245,165,.05),
-          transparent 35%
-        ),
-        var(--bg);
+      -webkit-font-smoothing: antialiased;
     }
-    .background-grid {
+    /* ---------- Background ---------- */
+    .grid {
       position: fixed;
       inset: 0;
       pointer-events: none;
       opacity: .035;
       background-image:
-        linear-gradient(rgba(255,255,255,.55) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.55) 1px, transparent 1px);
-      background-size: 34px 34px;
+        linear-gradient(
+          rgba(255,255,255,.55) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(255,255,255,.55) 1px,
+          transparent 1px
+        );
+      background-size: 42px 42px;
+      mask-image:
+        radial-gradient(
+          ellipse at center,
+          black 0%,
+          transparent 75%
+        );
     }
-    .glow {
+    .orb {
       position: fixed;
-      width: 320px;
-      height: 320px;
+      width: 260px;
+      height: 260px;
       left: 50%;
-      top: 50%;
+      top: 48%;
       transform: translate(-50%, -50%);
       border-radius: 50%;
-      background: rgba(75,232,255,.06);
-      filter: blur(80px);
+      background: rgba(85,232,255,.055);
+      filter: blur(75px);
       pointer-events: none;
+      animation: ambient 7s ease-in-out infinite;
     }
-    .box {
+    @keyframes ambient {
+      0%, 100% {
+        transform:
+          translate(-50%, -50%)
+          scale(.9);
+        opacity: .6;
+      }
+      50% {
+        transform:
+          translate(-50%, -50%)
+          scale(1.15);
+        opacity: 1;
+      }
+    }
+    /* ---------- Card ---------- */
+    .card {
       position: relative;
       width: min(430px, 100%);
-      padding: 30px 24px 24px;
-      text-align: center;
-      border: 1px solid var(--line);
-      border-radius: 28px;
-      background: var(--panel);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      background: var(--card);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
       box-shadow:
-        0 25px 80px rgba(0,0,0,.42),
-        inset 0 1px 0 rgba(255,255,255,.04);
+        0 30px 100px rgba(0,0,0,.5),
+        inset 0 1px 0 rgba(255,255,255,.045);
+      overflow: hidden;
     }
-    .logo {
-      display: inline-flex;
+    .card::before {
+      content: "";
+      position: absolute;
+      left: 10%;
+      right: 10%;
+      top: 0;
+      height: 1px;
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(85,232,255,.55),
+          transparent
+        );
+      opacity: .6;
+    }
+    /* ---------- Header ---------- */
+    .header {
+      display: flex;
       align-items: center;
-      gap: 3px;
+      justify-content: space-between;
       margin-bottom: 28px;
-      font-size: 15px;
-      font-weight: 950;
-      letter-spacing: 3.5px;
     }
-    .logo span {
-      color: var(--cyan);
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-    .subtitle {
-      margin-top: -18px;
-      margin-bottom: 28px;
-      color: #687386;
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-    }
-    .ring {
-      position: relative;
-      width: 176px;
-      height: 176px;
-      margin: auto;
+    .brand-mark {
+      width: 32px;
+      height: 32px;
       display: grid;
       place-items: center;
+      border-radius: 10px;
+      background:
+        linear-gradient(
+          145deg,
+          rgba(85,232,255,.22),
+          rgba(85,232,255,.05)
+        );
+      border: 1px solid rgba(85,232,255,.16);
+      box-shadow:
+        0 0 25px rgba(85,232,255,.08);
+    }
+    .brand-mark::after {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow:
+        0 0 15px var(--cyan);
+    }
+    .brand-name {
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 2.5px;
+    }
+    .brand-name span {
+      color: var(--cyan);
+    }
+    .secure {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 9px;
+      border-radius: 99px;
+      color: var(--green);
+      background: rgba(109,245,168,.055);
+      border: 1px solid rgba(109,245,168,.09);
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+    .secure-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow:
+        0 0 9px var(--green);
+    }
+    /* ---------- Hero ---------- */
+    .hero {
+      text-align: center;
+    }
+    .eyebrow {
+      margin-bottom: 18px;
+      color: var(--dim);
+      font-size: 8px;
+      font-weight: 850;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    /* ---------- Progress ---------- */
+    .progress-wrap {
+      position: relative;
+      width: 196px;
+      height: 196px;
+      margin: 0 auto 25px;
+    }
+    .progress {
+      position: absolute;
+      inset: 0;
       border-radius: 50%;
       background:
         conic-gradient(
           var(--cyan) var(--progress),
-          rgba(255,255,255,.065) var(--progress)
+          rgba(255,255,255,.055) var(--progress)
         );
+      transform: rotate(-90deg);
       box-shadow:
-        0 0 35px rgba(75,232,255,.10);
+        0 0 45px rgba(85,232,255,.08);
     }
-    .ring::before {
+    .progress::after {
       content: "";
       position: absolute;
-      inset: -2px;
+      width: 100%;
+      height: 100%;
       border-radius: 50%;
-      background: conic-gradient(
-        transparent 0deg,
-        rgba(75,232,255,.25) var(--progress),
-        transparent var(--progress)
-      );
-      filter: blur(8px);
+      background:
+        conic-gradient(
+          transparent 0deg,
+          rgba(85,232,255,.8) 0deg,
+          transparent 4deg
+        );
+      transform: rotate(0deg);
       opacity: .7;
-      pointer-events: none;
     }
-    .ring-inner {
-      position: relative;
-      width: 156px;
-      height: 156px;
+    .progress-inner {
+      position: absolute;
+      inset: 8px;
       display: grid;
       place-items: center;
       border-radius: 50%;
       background:
         radial-gradient(
           circle at 50% 35%,
-          #111925,
-          var(--panel-2) 68%
+          #131925,
+          #0b0f16 72%
         );
-      border: 1px solid rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.055);
     }
-    .count {
-      font-size: 50px;
+    .time {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .number {
+      font-size: 55px;
       font-weight: 900;
-      line-height: 1;
-      font-variant-numeric: tabular-nums;
-      letter-spacing: -2px;
+      line-height: .95;
+      letter-spacing: -3px;
+      font-variant-numeric:
+        tabular-nums;
     }
-    .count-label {
-      margin-top: 7px;
+    .unit {
+      margin-top: 10px;
       color: var(--muted);
       font-size: 8px;
-      font-weight: 800;
+      font-weight: 850;
       letter-spacing: 2px;
     }
+    /* ---------- Text ---------- */
     h1 {
-      margin-top: 28px;
-      font-size: 23px;
+      font-size: 25px;
       font-weight: 850;
-      letter-spacing: -.5px;
+      letter-spacing: -.7px;
     }
     .description {
-      min-height: 42px;
-      margin: 10px auto 0;
-      max-width: 310px;
+      max-width: 300px;
+      min-height: 40px;
+      margin: 9px auto 0;
       color: var(--muted);
       font-size: 12px;
-      line-height: 1.7;
+      line-height: 1.65;
     }
+    /* ---------- Status ---------- */
     .status {
       display: flex;
-      justify-content: center;
       align-items: center;
-      gap: 9px;
-      margin-top: 19px;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 18px;
       color: var(--green);
-      font-size: 9px;
+      font-size: 8px;
       font-weight: 850;
-      letter-spacing: 1.3px;
+      letter-spacing: 1.5px;
     }
-    .dot {
-      width: 7px;
-      height: 7px;
-      flex: 0 0 7px;
+    .status-dot {
+      position: relative;
+      width: 6px;
+      height: 6px;
       border-radius: 50%;
       background: var(--green);
-      box-shadow: 0 0 12px var(--green);
-      animation: pulse 1.7s ease-in-out infinite;
+      box-shadow:
+        0 0 12px var(--green);
     }
-    @keyframes pulse {
-      0%, 100% {
-        opacity: .55;
-        transform: scale(.85);
+    .status-dot::after {
+      content: "";
+      position: absolute;
+      inset: -4px;
+      border: 1px solid var(--green);
+      border-radius: 50%;
+      opacity: .2;
+      animation: statusPulse 1.8s ease-out infinite;
+    }
+    @keyframes statusPulse {
+      from {
+        transform: scale(.5);
+        opacity: .4;
       }
-      50% {
-        opacity: 1;
-        transform: scale(1.15);
+      to {
+        transform: scale(1.5);
+        opacity: 0;
       }
     }
+    /* ---------- Button ---------- */
     .install {
+      position: relative;
       width: 100%;
-      min-height: 54px;
-      margin-top: 25px;
+      height: 56px;
+      margin-top: 24px;
       border: 0;
-      border-radius: 15px;
+      border-radius: 16px;
       background: var(--cyan);
       color: #031014;
-      font-size: 13px;
-      font-weight: 900;
-      letter-spacing: .3px;
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: .8px;
       cursor: pointer;
       opacity: .35;
       pointer-events: none;
-      transform: translateY(0);
+      overflow: hidden;
       transition:
-        opacity .3s ease,
         transform .2s ease,
+        opacity .3s ease,
         box-shadow .3s ease;
-      box-shadow: 0 0 0 rgba(75,232,255,0);
+    }
+    .install::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 70%;
+      height: 100%;
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(255,255,255,.35),
+          transparent
+        );
+      transform: skewX(-20deg);
     }
     .install.ready {
       opacity: 1;
       pointer-events: auto;
       box-shadow:
-        0 10px 35px rgba(75,232,255,.16);
+        0 12px 35px rgba(85,232,255,.17);
     }
-    .install.ready:active {
+    .install.ready::before {
+      animation: shine 2.5s ease-in-out infinite;
+    }
+    @keyframes shine {
+      0% {
+        left: -100%;
+      }
+      45%, 100% {
+        left: 140%;
+      }
+    }
+    .install:active {
       transform: scale(.975);
     }
-    .install:hover {
-      box-shadow:
-        0 10px 40px rgba(75,232,255,.22);
-    }
-    .small {
-      margin-top: 13px;
-      color: #596273;
-      font-size: 9px;
-      line-height: 1.55;
-    }
-    .secure {
+    /* ---------- Footer ---------- */
+    .footer {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 6px;
+      justify-content: space-between;
       margin-top: 18px;
-      color: #596273;
+      padding-top: 17px;
+      border-top: 1px solid rgba(255,255,255,.055);
+      color: var(--dim);
       font-size: 8px;
       font-weight: 700;
-      letter-spacing: .8px;
-      text-transform: uppercase;
+      letter-spacing: .6px;
     }
-    .secure-icon {
-      font-size: 9px;
+    /* ---------- Ready State ---------- */
+    .ready-state .progress {
+      background:
+        conic-gradient(
+          var(--green) 360deg,
+          var(--green) 360deg
+        );
+      box-shadow:
+        0 0 45px rgba(109,245,168,.12);
     }
+    .ready-state .number {
+      color: var(--green);
+      font-size: 48px;
+      letter-spacing: 0;
+    }
+    /* ---------- Small Screens ---------- */
     @media (max-height: 700px) {
-      .box {
-        padding-top: 22px;
-        padding-bottom: 18px;
+      .card {
+        padding: 22px;
       }
-      .logo {
+      .header {
         margin-bottom: 18px;
       }
-      .subtitle {
+      .progress-wrap {
+        width: 155px;
+        height: 155px;
         margin-bottom: 18px;
       }
-      .ring {
-        width: 145px;
-        height: 145px;
-      }
-      .ring-inner {
-        width: 127px;
-        height: 127px;
-      }
-      .count {
-        font-size: 42px;
+      .number {
+        font-size: 43px;
       }
       h1 {
-        margin-top: 20px;
+        font-size: 21px;
+      }
+      .install {
+        height: 52px;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
       }
     }
   </style>
 </head>
 <body>
-  <div class="background-grid"></div>
-  <div class="glow"></div>
-  <main class="box">
-    <div class="logo">VOID<span>HUB</span></div>
-    <div class="subtitle">Secure installation portal</div>
-    <div
-      class="ring"
-      id="ring"
-      style="--progress: 0deg;"
-    >
-      <div class="ring-inner">
-        <div>
-          <div class="count" id="count">5.0</div>
-          <div class="count-label">SECONDS</div>
+  <div class="grid"></div>
+  <div class="orb"></div>
+  <main class="card" id="card">
+    <header class="header">
+      <div class="brand">
+        <div class="brand-mark"></div>
+        <div class="brand-name">
+          VOID<span>HUB</span>
         </div>
       </div>
-    </div>
-    <h1 id="title">Preparing installation</h1>
-    <p class="description" id="description">
-      Your installation request is being prepared.
-    </p>
-    <div class="status">
-      <span class="dot"></span>
-      <span id="statusText">SYSTEM READY</span>
-    </div>
-    <button
-      class="install"
-      id="installButton"
-      type="button"
-    >
-      INSTALL NOW
-    </button>
-    <p class="small">
-      When preparation is complete, the iOS installer will open automatically.
-    </p>
-    <div class="secure">
-      <span class="secure-icon">◆</span>
-      <span>HTTPS DELIVERY</span>
-    </div>
+      <div class="secure">
+        <span class="secure-dot"></span>
+        SECURE
+      </div>
+    </header>
+    <section class="hero">
+      <div class="eyebrow">
+        Installation portal
+      </div>
+      <div class="progress-wrap">
+        <div
+          class="progress"
+          id="progress"
+          style="--progress: 0deg"
+        ></div>
+        <div class="progress-inner">
+          <div class="time">
+            <div
+              class="number"
+              id="number"
+            >5</div>
+            <div class="unit">
+              SECONDS
+            </div>
+          </div>
+        </div>
+      </div>
+      <h1 id="title">
+        Preparing installation
+      </h1>
+      <p
+        class="description"
+        id="description"
+      >
+        Preparing your installation request.
+        Please wait a moment.
+      </p>
+      <div class="status">
+        <span class="status-dot"></span>
+        <span id="status">
+          SYSTEM READY
+        </span>
+      </div>
+      <button
+        class="install"
+        id="install"
+        type="button"
+      >
+        INSTALL NOW
+      </button>
+    </section>
+    <footer class="footer">
+      <span>
+        VOIDHUB INSTALLER
+      </span>
+      <span>
+        IOS
+      </span>
+    </footer>
   </main>
   <script>
     const manifestURL =
@@ -344,70 +541,104 @@
     const installURL =
       "itms-services://?action=download-manifest&url=" +
       encodeURIComponent(manifestURL);
-    const countElement =
-      document.getElementById("count");
-    const ring =
-      document.getElementById("ring");
+    const duration = 5000;
+    const progress =
+      document.getElementById("progress");
+    const number =
+      document.getElementById("number");
     const title =
       document.getElementById("title");
     const description =
       document.getElementById("description");
-    const statusText =
-      document.getElementById("statusText");
-    const installButton =
-      document.getElementById("installButton");
-    const duration = 5000;
-    const startTime = performance.now();
+    const status =
+      document.getElementById("status");
+    const install =
+      document.getElementById("install");
+    const card =
+      document.getElementById("card");
     let launched = false;
-    let finished = false;
-    function launchInstall() {
-      if (launched) return;
-      launched = true;
-      title.textContent = "Opening installer";
-      description.textContent =
-        "Launching the iOS installation request.";
-      statusText.textContent =
-        "INSTALL REQUEST SENT";
-      window.location.href = installURL;
-    }
-    function animate(timestamp) {
-      if (finished) return;
+    let complete = false;
+    const start =
+      performance.now();
+    /*
+      The ring is animated continuously with
+      requestAnimationFrame.
+      The number only changes when the displayed
+      value actually changes, preventing rapid
+      DOM updates that can make the text appear
+      to flicker.
+    */
+    let lastDisplayed = null;
+    function animate(now) {
+      if (complete) return;
       const elapsed =
-        timestamp - startTime;
-      const progress =
+        now - start;
+      const fraction =
         Math.min(elapsed / duration, 1);
       const remaining =
-        Math.max(0, duration - elapsed);
+        Math.max(duration - elapsed, 0);
       const seconds =
-        remaining / 1000;
+        Math.ceil(remaining / 1000);
       const degrees =
-        progress * 360;
-      ring.style.setProperty(
+        fraction * 360;
+      progress.style.setProperty(
         "--progress",
         degrees + "deg"
       );
-      if (progress < 1) {
-        countElement.textContent =
-          seconds.toFixed(1);
-        requestAnimationFrame(animate);
+      if (seconds !== lastDisplayed) {
+        lastDisplayed = seconds;
+        number.textContent =
+          seconds;
+      }
+      if (fraction >= 1) {
+        finish();
         return;
       }
-      finished = true;
-      countElement.textContent = "✓";
+      requestAnimationFrame(animate);
+    }
+    function finish() {
+      complete = true;
+      progress.style.setProperty(
+        "--progress",
+        "360deg"
+      );
+      card.classList.add(
+        "ready-state"
+      );
+      number.textContent = "✓";
       title.textContent =
         "Ready to install";
       description.textContent =
-        "Opening the iOS installer now.";
-      statusText.textContent =
+        "Your installation request is ready.";
+      status.textContent =
         "INSTALLER READY";
-      installButton.classList.add("ready");
-      setTimeout(launchInstall, 500);
+      install.classList.add(
+        "ready"
+      );
+      setTimeout(
+        launchInstall,
+        650
+      );
     }
-    installButton.addEventListener(
+    function launchInstall() {
+      if (launched) return;
+      launched = true;
+      title.textContent =
+        "Opening installer";
+      description.textContent =
+        "Launching the iOS installation request.";
+      status.textContent =
+        "INSTALL REQUEST SENT";
+      window.location.href =
+        installURL;
+    }
+    install.addEventListener(
       "click",
       launchInstall
     );
-    requestAnimationFrame(animate);
+    requestAnimationFrame(
+      animate
+    );
   </script>
 </body>
 </html>
