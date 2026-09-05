@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#05070b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>VoidHub — Preparing Install</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    :root {
+      --bg: #05070b;
+      --panel: #0d1119;
+      --text: #f4f7fb;
+      --muted: #8b96a8;
+      --cyan: #4be8ff;
+      --green: #68f5a5;
+      --line: rgba(255,255,255,.09);
+    }
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 50% 20%, rgba(75,232,255,.14), transparent 35%),
+        var(--bg);
+    }
+    .background-grid {
+      position: fixed;
+      inset: 0;
+      opacity: .04;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px);
+      background-size: 36px 36px;
+    }
+    .box {
+      position: relative;
+      width: min(430px, calc(100% - 32px));
+      padding: 38px 28px;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(13,17,25,.88);
+      backdrop-filter: blur(20px);
+    }
+    .logo {
+      margin-bottom: 38px;
+      font-size: 14px;
+      font-weight: 950;
+      letter-spacing: 3px;
+    }
+    .logo span {
+      color: var(--cyan);
+    }
+    .ring {
+      width: 150px;
+      height: 150px;
+      display: grid;
+      place-items: center;
+      margin: auto;
+      border-radius: 50%;
+      background: conic-gradient(
+        var(--cyan) 0deg,
+        var(--cyan) var(--progress),
+        rgba(255,255,255,.07) var(--progress)
+      );
+      transition: .9s linear;
+    }
+    .ring-inner {
+      width: 132px;
+      height: 132px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--panel);
+    }
+    .count {
+      font-size: 48px;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .count-label {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+    }
+    h1 {
+      margin-top: 30px;
+      font-size: 23px;
+    }
+    .description {
+      margin: 11px auto 0;
+      max-width: 310px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+    .status {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: 24px;
+      color: var(--green);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: 1px;
+    }
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 12px var(--green);
+    }
+    .install {
+      width: 100%;
+      min-height: 52px;
+      margin-top: 28px;
+      border: 0;
+      border-radius: 13px;
+      background: var(--cyan);
+      color: #031014;
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+      opacity: .45;
+      pointer-events: none;
+      transition: .2s ease;
+    }
+    .install.ready {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .install:active {
+      transform: scale(.98);
+    }
+    .small {
+      margin-top: 14px;
+      color: #596273;
+      font-size: 9px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="background-grid"></div>
+  <main class="box">
+    <div class="logo">VOID<span>HUB</span></div>
+<div class="ring" id="ring" style="--progress: 0deg;">
+  <div class="ring-inner">
+    <div>
+      <div class="count" id="count">5</div>
+      <div class="count-label">SECONDS</div>
+    </div>
+  </div>
+</div>
+<h1 id="title">Preparing installation</h1>
+<p class="description" id="description">
+  Your installation request is being prepared.
+</p>
+<div class="status">
+  <span class="dot"></span>
+  <span id="statusText">SYSTEM READY</span>
+</div>
+<button class="install" id="installButton" type="button">
+  INSTALL NOW
+</button>
+<p class="small">
+  If the installation does not open automatically,
+  tap the Install Now button.
+</p>
+  </main>
+  <script>
+    const manifestURL =
+      "https://github.com/GZZGSOLAE/Hgfghj/releases/download/B/manifest.plist";
+    const installURL =
+      "itms-services://?action=download-manifest&url=" +
+      encodeURIComponent(manifestURL);
+    const countElement = document.getElementById("count");
+    const ring = document.getElementById("ring");
+    const title = document.getElementById("title");
+    const description = document.getElementById("description");
+    const statusText = document.getElementById("statusText");
+    const installButton = document.getElementById("installButton");
+    let seconds = 5;
+    let launched = false;
+    function launchInstall() {
+      if (launched) return;
+      launched = true;
+      title.textContent = "Opening installer";
+      description.textContent =
+        "Launching the iOS installation request.";
+      statusText.textContent = "INSTALL REQUEST SENT";
+      window.location.href = installURL;
+    }
+    function updateCountdown() {
+      const progress = ((5 - seconds) / 5) * 360;
+      countElement.textContent = seconds;
+      ring.style.setProperty("--progress", progress + "deg");
+      if (seconds <= 0) {
+        countElement.textContent = "✓";
+        title.textContent = "Ready to install";
+        description.textContent =
+          "Opening the iOS installer now.";
+        statusText.textContent = "INSTALLER READY";
+        installButton.classList.add("ready");
+        setTimeout(launchInstall, 500);
+        return;
+      }
+      seconds--;
+      setTimeout(updateCountdown, 1000);
+    }
+    installButton.addEventListener("click", launchInstall);
+    updateCountdown();
+  </script>
+</body>
+</html>
